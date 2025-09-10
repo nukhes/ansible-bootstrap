@@ -13,6 +13,7 @@
       - xset
       - dex
       - redshift
+      - lxsession
     apps:
       - chromium
       - vscode

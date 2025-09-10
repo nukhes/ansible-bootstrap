@@ -111,7 +111,7 @@
         groups: docker
         append: yes
       when: "'docker' not in ansible_facts.user_gid"
-      
+
     - name: Install Flatpak
       command: xbps-install -y flatpak
 
@@ -126,5 +126,19 @@
       become: false
       shell: |
         flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+      args:
+        executable: /bin/bash
+        
+    - name: Install Flatpak apps only if missing
+      become: false
+      shell: |
+        for app in \
+          com.heroicgameslauncher.hlg \
+          com.valvesoftware.Steam \
+          com.usebottles.bottles \
+          com.github.pinapp.Pin \
+          com.github.tchx84.Flatseal; do
+            flatpak info --user $app || flatpak install -y --user flathub $app
+        done
       args:
         executable: /bin/bash

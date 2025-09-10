@@ -1,5 +1,6 @@
-# void-bootstrap
-Setup Void Linux for my use-case using Ansible
+# ansible-bootstrap
+Setup Linux for my use-case using Ansible
+## Void Linux
 ```bash
 sudo xbps-install -S ansible void-repo-multilib void-repo-nonfree
 sudo xbps-install -S

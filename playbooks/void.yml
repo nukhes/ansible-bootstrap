@@ -11,6 +11,7 @@
       - fish-shell
       - xsetroot
       - xset
+      - dex
     apps:
       - chromium
       - vscode

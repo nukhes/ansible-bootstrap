@@ -1,0 +1,85 @@
+---
+- hosts: local
+  become: yes
+  vars:
+    base_packages:
+      - git
+      - curl
+      - wget
+      - htop
+      - stow
+    apps:
+      - brave
+      - code
+      - kitty
+      - xorg
+      - i3
+      - docker
+
+    dotfiles_repo: "https://github.com/nukhes/dotfiles.git"
+    dotfiles_dir: "{{ ansible_env.HOME }}/dotfiles"
+
+  tasks:
+    - name: Update System
+      command: xbps-install -Syu
+
+    - name: Install packages
+      command: xbps-install -y {{ item }}
+      loop: "{{ base_packages + apps }}"
+
+    - name: Clone dotfiles
+      become: false
+      git:
+        repo: "{{ dotfiles_repo }}"
+        dest: "{{ dotfiles_dir }}"
+        version: main
+        update: yes
+
+    - name: Apply dotfiles with stow
+      become: false
+      shell: |
+        cd "{{ dotfiles_dir }}"
+        stow --adopt --override='.*' .
+      args:
+        executable: /bin/bash
+    
+    - name: Create the main directories in /home
+      file: 
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
+      loop: 
+        - "/home/{{ username }}/code"     # workspaces are used for cloning repositories
+        - "/home/{{ username }}/docs"     # documents are used for other stuff
+        - "/home/{{ username }}/docs"     # downloads from web
+        - "/home/{{ username }}/media"    # media files like videos or images
+
+    - name: Install Pixi
+      become: false
+      shell: |
+        curl -fsSL https://pixi.sh/install.sh | sh
+      args:
+        executable: /bin/bash
+      creates: "{{ ansible_env.HOME }}/.pixi/bin/pixi"
+
+    - name: Install Pixi devtools
+      become: false
+      shell: |
+        export PATH="$HOME/.pixi/bin:$PATH"
+        pixi global install eza nodejs pnpm
+      args:
+        executable: /bin/bash
+
+    - name: Enable Docker Service
+      file:
+        src: /etc/sv/docker
+        dest: /var/service/docker
+        state: link
+
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user_id }}"
+        groups: docker
+        append: yes

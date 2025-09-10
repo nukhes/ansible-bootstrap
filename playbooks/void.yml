@@ -10,6 +10,7 @@
       - stow
       - fish-shell
       - xsetroot
+      - xset
     apps:
       - chromium
       - vscode

@@ -9,6 +9,7 @@
       - htop
       - stow
       - fish-shell
+      - xsetroot
     apps:
       - chromium
       - vscode

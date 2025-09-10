@@ -1,8 +1,8 @@
 # void-bootstrap
 Setup Void Linux for my use-case using Ansible
 ```bash
-sudo xbps-install -S ansible void-repo-multilib void-repo-nonfre
-xbps-install -S
+sudo xbps-install -S ansible void-repo-multilib void-repo-nonfree
+sudo xbps-install -S
 ssh-keygen -t ed25519 -C "79018158+nukhes@users.noreply.github.com"
 cat .ssh/id_ed25519.pub
 ```

@@ -14,8 +14,11 @@
       - dex
       - redshift
       - lxsession
+      - xrdb
+      - xinput
+      - setxkbmap
     apps:
-      - chromium
+      - firefox
       - vscode
       - feh
       - mpv

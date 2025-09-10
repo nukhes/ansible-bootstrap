@@ -143,3 +143,23 @@
         done
       args:
         executable: /bin/bash
+
+    - name: Install Bluetooth packages
+      command: xbps-install -y bluez bluez-alsa pulseaudio-bluetooth
+      args:
+        creates: /usr/bin/bluetoothctl
+
+    - name: Enable Bluetooth service
+      file:
+        src: /etc/sv/bluetoothd
+        dest: /var/service/bluetoothd
+        state: link
+      when: not (ansible_stat_bt.stat.exists)
+      vars:
+        ansible_stat_bt: "{{ lookup('ansible.builtin.stat', '/var/service/bluetoothd', get_attributes=True) }}"
+
+    - name: Add user to bluetooth group
+      user:
+        name: "{{ ansible_user_id }}"
+        groups: bluetooth
+        append: yes

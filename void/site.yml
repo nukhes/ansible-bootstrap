@@ -1,0 +1,16 @@
+---
+- hosts: local
+  become: yes
+  vars:
+    username: "{{ ansible_user_id }}"
+    dotfiles_repo: "https://github.com/nukhes/dotfiles.git"
+    dotfiles_dir: "{{ ansible_env.HOME }}/dotfiles"
+
+  roles:
+    - common
+    - dev
+    - desktop
+    - docker
+    - flatpak
+    - bluetooth
+    - audio

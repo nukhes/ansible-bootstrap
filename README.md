@@ -11,6 +11,7 @@ cat .ssh/id_ed25519.pub
 After that Ansible Playbook can be executed
 
 ```bash
-git clone https://github.com/nukhes/bootstrap.git
-ansible-playbook -i inventory.ini playbooks/void.yml
+git clone https://github.com/nukhes/ansible-bootstrap.git
+cd ./ansible-bootstrap/void
+ansible-playbook -i inventory.ini void.yml
 ```

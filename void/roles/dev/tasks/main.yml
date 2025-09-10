@@ -1,0 +1,18 @@
+---
+- name: Install dev packages
+  package:
+    name:
+      - vscode
+    state: present
+
+- name: Install Pixi
+  become: false
+  shell: curl -fsSL https://pixi.sh/install.sh | sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.pixi/bin/pixi"
+
+- name: Install Pixi devtools
+  become: false
+  shell: "{{ ansible_env.HOME }}/.pixi/bin/pixi global install eza nodejs pnpm"
+  args:
+    creates: "{{ ansible_env.HOME }}/.pixi/bin/eza"

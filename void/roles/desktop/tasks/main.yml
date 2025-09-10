@@ -1,0 +1,17 @@
+---
+- name: Install desktop apps
+  package:
+    name:
+      - firefox
+      - feh
+      - mpv
+      - thunar
+      - telegram-desktop
+      - flameshot
+      - kitty
+      - xorg
+      - i3
+      - polybar
+      - rofi
+      - newsboat
+    state: present

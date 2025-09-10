@@ -1,0 +1,8 @@
+---
+- name: Install audio stack
+  package:
+    name:
+      - pulseaudio
+      - pulseaudio-utils
+      - pavucontrol
+    state: present

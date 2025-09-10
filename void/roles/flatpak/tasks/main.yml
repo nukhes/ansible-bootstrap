@@ -1,0 +1,21 @@
+---
+- name: Install Flatpak
+  package:
+    name: flatpak
+    state: present
+
+- name: Add Flathub remote
+  become: false
+  command: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+
+- name: Install Flatpak apps
+  become: false
+  flatpak:
+    name:
+      - com.heroicgameslauncher.hgl
+      - com.valvesoftware.Steam
+      - com.usebottles.bottles
+      - com.github.pinapp.Pin
+      - com.github.tchx84.Flatseal
+    state: present
+    method: user

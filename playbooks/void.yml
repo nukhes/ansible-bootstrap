@@ -12,6 +12,7 @@
       - xsetroot
       - xset
       - dex
+      - redshift
     apps:
       - chromium
       - vscode

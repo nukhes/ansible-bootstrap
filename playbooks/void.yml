@@ -12,6 +12,7 @@
     apps:
       - chromium
       - vscode
+      - feh
       - mpv
       - thunar
       - telegram-desktop
@@ -128,7 +129,7 @@
         flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
       args:
         executable: /bin/bash
-        
+
     - name: Install Flatpak apps only if missing
       become: false
       shell: |

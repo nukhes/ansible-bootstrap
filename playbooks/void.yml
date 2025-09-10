@@ -22,10 +22,24 @@
   tasks:
     - name: Update System
       command: xbps-install -Syu
+      args:
+        creates: /var/lib/xbps/updates_complete # crude idempotency marker
+
+    - name: Check if package is installed
+      command: xbps-query -R {{ item }}
+      register: pkg_check
+      ignore_errors: yes
+      changed_when: false
+      loop: "{{ base_packages + apps }}"
+      loop_control:
+        loop_var: item
 
     - name: Install packages
-      command: xbps-install -y {{ item }}
-      loop: "{{ base_packages + apps }}"
+      command: xbps-install -y {{ item.item }}
+      when: item.rc != 0
+      loop: "{{ pkg_check.results }}"
+      loop_control:
+        label: "{{ item.item }}"
 
     - name: Clone dotfiles
       become: false
@@ -42,7 +56,8 @@
         stow --adopt --override='.*' .
       args:
         executable: /bin/bash
-    
+      when: "'stow' not in ansible_facts.packages or ansible_facts.packages['stow']['version'] is defined"
+
     - name: Create the main directories in /home
       file: 
         path: "{{ item }}"
@@ -51,10 +66,10 @@
         group: "{{ username }}"
         mode: 0755
       loop: 
-        - "/home/{{ username }}/code"     # workspaces are used for cloning repositories
-        - "/home/{{ username }}/docs"     # documents are used for other stuff
-        - "/home/{{ username }}/docs"     # downloads from web
-        - "/home/{{ username }}/media"    # media files like videos or images
+        - "/home/{{ username }}/code"
+        - "/home/{{ username }}/docs"
+        - "/home/{{ username }}/dl"
+        - "/home/{{ username }}/media"
 
     - name: Install Pixi
       become: false
@@ -71,15 +86,20 @@
         pixi global install eza nodejs pnpm
       args:
         executable: /bin/bash
+      when: not (ansible_env.HOME + '/.pixi/bin/eza') is exists
 
     - name: Enable Docker Service
       file:
         src: /etc/sv/docker
         dest: /var/service/docker
         state: link
+      when: not (ansible_stat.stat.exists)
+      vars:
+        ansible_stat: "{{ lookup('ansible.builtin.stat', '/var/service/docker', get_attributes=True) }}"
 
     - name: Add user to docker group
       user:
         name: "{{ ansible_user_id }}"
         groups: docker
         append: yes
+      when: "'docker' not in ansible_facts.user_gid"

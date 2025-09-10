@@ -8,12 +8,20 @@
       - wget
       - htop
       - stow
+      - fish-shell
     apps:
-      - brave
-      - code
+      - chromium
+      - vscode
+      - mpv
+      - thunar
+      - telegram-desktop
+      - flameshot
       - kitty
       - xorg
       - i3
+      - polybar
+      - rofi
+      - newsboat
       - docker
 
     dotfiles_repo: "https://github.com/nukhes/dotfiles.git"

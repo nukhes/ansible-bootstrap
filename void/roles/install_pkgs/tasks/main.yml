@@ -1,0 +1,54 @@
+---
+- name: Installing desktop apps
+  become: true
+  community.general.xbps:
+    name:
+      - vivaldi
+      - feh
+      - mpv
+      - Thunar
+      - lxappearance
+      - thunar-archive-plugin
+      - telegram-desktop
+      - flameshot
+      - kitty
+      - xorg
+      - i3
+      - polybar
+      - rofi
+      - newsboat
+      - git
+      - curl
+      - wget
+      - htop
+      - stow
+      - fish-shell
+      - xsetroot
+      - xset
+      - dex
+      - redshift
+      - lxsession
+      - xrdb
+      - xinput
+      - setxkbmap
+      - unzip
+      - xdg-desktop-portal
+      - bluez
+      - pulseaudio
+      - pulseaudio-utils
+      - pavucontrol
+    state: present
+
+- name: Install Pixi
+  become: false
+  shell: curl -fsSL https://pixi.sh/install.sh | sh
+  args:
+    creates: "/home/alves/.pixi/bin/pixi"
+
+- name: Install Pixi devtools
+  become: false
+  shell: "/home/alves/.pixi/bin/pixi global install eza nodejs pnpm"
+  args:
+    creates: "/home/alves/.pixi/bin/eza"
+
+

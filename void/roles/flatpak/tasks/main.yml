@@ -1,5 +1,6 @@
 ---
-- name: Install Flatpak
+- name: Installing Flatpaks
+  become: true
   package:
     name: flatpak
     state: present
@@ -15,7 +16,7 @@
       - com.heroicgameslauncher.hgl
       - com.valvesoftware.Steam
       - com.usebottles.bottles
-      - com.github.pinapp.Pin
+      - io.github.fabrialberio.pinapp
       - com.github.tchx84.Flatseal
     state: present
     method: user

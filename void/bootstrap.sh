@@ -33,4 +33,4 @@ fi
 cd "$WORKDIR"
 
 echo "[*] Running playbook as $REAL_USER..."
-sudo -u "$REAL_USER" ansible-playbook -i inventory.ini void.yml
+ansible-playbook -i inventory.ini site.yml -K

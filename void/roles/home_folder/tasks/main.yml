@@ -1,0 +1,36 @@
+---
+- name: Creating user directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+  loop:
+    - "/home/{{ username }}/.config"
+    - "/home/{{ username }}/code"
+    - "/home/{{ username }}/docs"
+    - "/home/{{ username }}/dl"
+    - "/home/{{ username }}/media"
+
+- name: Show username and dest
+  ansible.builtin.debug:
+    msg: "username={{ username }}, dest=/home/{{ username }}/dotfiles"
+
+- name: Clone dotfiles
+  ansible.builtin.git:
+    repo: "https://github.com/nukhes/dotfiles.git"
+    dest: "/home/{{ username }}/dotfiles"
+    version: main
+    update: yes
+
+- name: Apply dotfiles with stow
+  ansible.builtin.command:
+    cmd: stow .
+    chdir: "/home/{{ username }}/dotfiles"
+  become: true
+  become_user: "{{ username }}"
+  register: stow_run
+  changed_when: stow_run.rc == 0 and
+                "'LINK:' in stow_run.stdout or 'UNLINK:' in stow_run.stdout"
+  failed_when: stow_run.rc != 0

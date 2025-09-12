@@ -1,6 +1,7 @@
 ---
-- name: Install Docker
-  package:
+- name: Installing Docker
+  become: true
+  community.general.xbps:
     name: docker
     state: present
 

@@ -1,10 +1,11 @@
 ---
-- name: Allowing user to turn off or reboot the machine
+- name: Allowing user to turn off, reboot and suspend the machine
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/shutdown"
     content: |
       {{ username }} ALL=(ALL) NOPASSWD: /usr/bin/poweroff
       {{ username }} ALL=(ALL) NOPASSWD: /usr/bin/reboot
+      {{ username }} ALL=(ALL) NOPASSWD: /usr/bin/zzz
     owner: root
     group: root
     mode: '0440'

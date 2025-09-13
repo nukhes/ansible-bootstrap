@@ -4,6 +4,7 @@
   community.general.xbps:
     name:
       - vivaldi
+      - parcellite
       - dropbox
       - libayatana-appindicator
       - feh

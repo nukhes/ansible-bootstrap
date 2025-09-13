@@ -37,6 +37,9 @@
       - pulseaudio
       - pulseaudio-utils
       - pavucontrol
+      - dbus
+      - xdg-desktop-portal
+      - xdg-desktop-portal-gtk
     state: present
 
 - name: Install Pixi

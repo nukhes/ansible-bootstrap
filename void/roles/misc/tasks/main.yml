@@ -20,20 +20,16 @@
 
 - name: Add user to bluetooth group
   user:
-    name: "alves"
+    name: "{{ username}}"
     groups: bluetooth
     append: yes
 
-- name: Setup dbus
-  hosts: localhost
-  become: true
-  tasks:
-    - name: Enable dbus service
-      file:
-        src: /etc/sv/dbus
-        dest: /var/service/dbus
-        state: link
-        force: true
+- name: Enable dbus service
+  file:
+    src: /etc/sv/dbus
+    dest: /var/service/dbus
+    state: link
+    force: true
 
 - name: Enable pulseaudio service in runit
   file:

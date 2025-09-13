@@ -45,3 +45,38 @@
 - name: Restart pulseaudio service
   command: sv restart pulseaudio
   ignore_errors: true
+  
+- name: Setup Autologin from TTY
+  become: true
+  block:
+    - name: Copy agetty-tty1 service to agetty-autologin-tty1
+      ansible.builtin.copy:
+        src: /etc/sv/agetty-tty1
+        dest: /etc/sv/agetty-autologin-tty1
+        remote_src: true
+
+    - name: Configure agetty-autologin-tty1 conf file
+      ansible.builtin.copy:
+        content: |
+          if [ -x /sbin/agetty -o -x /bin/agetty ]; then
+                  # util-linux specific settings
+                  if [ "${tty}" = "tty1" ]; then
+                          GETTY_ARGS="--autologin {{ username }} --noclear"
+                  fi
+          fi
+
+          BAUD_RATE=38400
+          TERM_NAME=linux
+        dest: /etc/sv/agetty-autologin-tty1/conf
+        mode: '0644'
+
+    - name: Disable regular tty1 service
+      ansible.builtin.file:
+        path: /var/service/agetty-tty1
+        state: absent
+
+    - name: Enable autologin tty1 service
+      ansible.builtin.file:
+        src: /etc/sv/agetty-autologin-tty1
+        dest: /var/service/agetty-autologin-tty1
+        state: link

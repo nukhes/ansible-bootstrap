@@ -64,7 +64,6 @@
         state: link
 
 - name: Set custom kernel boot parameters on Void Linux
-  hosts: localhost
   become: true
   vars:
     kernel_params: >
@@ -92,3 +91,23 @@
     - name: Regenerate GRUB configuration
       command: grub-mkconfig -o /boot/grub/grub.cfg
 
+- name: Add poweroff, reboot, and suspend permissions to /etc/sudoers
+  become: true
+  vars:
+    sudo_lines:
+      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/poweroff"
+      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/reboot"
+      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/zzz"
+
+  tasks:
+    - name: Ensure sudo rules are present in /etc/sudoers
+      blockinfile:
+        path: /etc/sudoers
+        block: |
+          ## Poweroff, reboot, and suspension
+          {% for line in sudo_lines %}
+          {{ line }}
+          {% endfor %}
+        validate: '/usr/sbin/visudo -cf %s'
+        insertafter: EOF
+        state: present

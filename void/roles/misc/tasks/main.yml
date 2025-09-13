@@ -30,84 +30,70 @@
   command: sv restart pulseaudio
   ignore_errors: true
   
-- name: Setup Autologin from TTY
-  block:
-    - name: Copy agetty-tty1 service to agetty-autologin-tty1
-      ansible.builtin.copy:
-        src: /etc/sv/agetty-tty1
-        dest: /etc/sv/agetty-autologin-tty1
-        remote_src: true
+- name: Copy agetty-tty1 service to agetty-autologin-tty1
+  ansible.builtin.copy:
+    src: /etc/sv/agetty-tty1
+    dest: /etc/sv/agetty-autologin-tty1
+    remote_src: true
 
-    - name: Configure agetty-autologin-tty1 conf file
-      ansible.builtin.copy:
-        content: |
-          if [ -x /sbin/agetty -o -x /bin/agetty ]; then
-                  if [ "${tty}" = "tty1" ]; then
-                          GETTY_ARGS="--autologin {{ username }} --noclear"
-                  fi
-          fi
+- name: Configure agetty-autologin-tty1 conf file
+  ansible.builtin.copy:
+    content: |
+      if [ -x /sbin/agetty -o -x /bin/agetty ]; then
+              if [ "${tty}" = "tty1" ]; then
+                      GETTY_ARGS="--autologin {{ username }} --noclear"
+              fi
+      fi
 
-          BAUD_RATE=38400
-          TERM_NAME=linux
-        dest: /etc/sv/agetty-autologin-tty1/conf
-        mode: '0644'
+      BAUD_RATE=38400
+      TERM_NAME=linux
+    dest: /etc/sv/agetty-autologin-tty1/conf
+    mode: '0644'
 
-    - name: Disable regular tty1 service
-      ansible.builtin.file:
-        path: /var/service/agetty-tty1
-        state: absent
+- name: Disable regular tty1 service
+  ansible.builtin.file:
+    path: /var/service/agetty-tty1
+    state: absent
 
-    - name: Enable autologin tty1 service
-      ansible.builtin.file:
-        src: /etc/sv/agetty-autologin-tty1
-        dest: /var/service/agetty-autologin-tty1
-        state: link
+- name: Enable autologin tty1 service
+  ansible.builtin.file:
+    src: /etc/sv/agetty-autologin-tty1
+    dest: /var/service/agetty-autologin-tty1
+    state: link
 
-- name: Set custom kernel boot parameters on Void Linux
+- name: Set custom kernel boot parameters
   become: true
-  vars:
-    kernel_params: >
-      loglevel=0
-      amdgpu.ppfeaturemask=0xffffffff
-      sysrq_always_enabled=1
-      rootflags=noatime
-      pci=noaer
-      audit=0
-      mitigations=off
-      spec_store_bypass_disable
-      spectre_v2
-      quiet
-      kernel.nmi_watchdog=0
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=).*'
+    line: '\1"loglevel=0 amdgpu.ppfeaturemask=0xffffffff sysrq_always_enabled=1 rootflags=noatime pci=noaer audit=0 mitigations=off spec_store_bypass_disable spectre_v2 quiet kernel.nmi_watchdog=0"'
+    backrefs: yes
 
-  tasks:
-
-    - name: Ensure GRUB_CMDLINE_LINUX_DEFAULT has the custom kernel parameters
-      lineinfile:
-        path: /etc/default/grub
-        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
-        line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_params }}"'
-        backrefs: yes
-
-    - name: Regenerate GRUB configuration
-      command: grub-mkconfig -o /boot/grub/grub.cfg
-
-- name: Add poweroff, reboot, and suspend permissions to /etc/sudoers
+- name: Regenerate GRUB configuration
   become: true
-  vars:
-    sudo_lines:
-      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/poweroff"
-      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/reboot"
-      - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/zzz"
+  command: grub-mkconfig -o /boot/grub/grub.cfg
 
-  tasks:
-    - name: Ensure sudo rules are present in /etc/sudoers
-      blockinfile:
-        path: /etc/sudoers
-        block: |
-          ## Poweroff, reboot, and suspension
-          {% for line in sudo_lines %}
-          {{ line }}
-          {% endfor %}
-        validate: '/usr/sbin/visudo -cf %s'
-        insertafter: EOF
-        state: present
+- name: Add poweroff, reboot, and suspend permissions to user
+  become: true
+  blockinfile:
+    path: /etc/sudoers
+    block: |
+      ## Poweroff, reboot, and suspension
+      {% for line in nopassword %}
+      {{ line }}
+      {% endfor %}
+    validate: '/usr/sbin/visudo -cf %s'
+    insertafter: EOF
+    state: present
+
+- name: Set custom DNS servers on Void Linux
+  become: true
+  blockinfile:
+    path: /etc/resolv.conf
+    create: yes
+    block: |
+      {% for dns in dns_servers %}
+      nameserver {{ dns }}
+      {% endfor %}
+    state: present
+  when: not dhcpcd_conf.stat.exists

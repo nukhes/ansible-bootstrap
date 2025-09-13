@@ -97,3 +97,10 @@
       {% endfor %}
     state: present
   when: not dhcpcd_conf.stat.exists
+
+- name: Ensure Dropbox appindicator symlink exists
+  become: true
+  file:
+    src: /usr/lib/libayatana-appindicator3.so.1
+    dest: /usr/lib/libappindicator3.so.1
+    state: link

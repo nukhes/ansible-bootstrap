@@ -5,6 +5,7 @@
     name:
       - vivaldi
       - dropbox
+      - libayatana-appindicator
       - feh
       - mpv
       - Thunar

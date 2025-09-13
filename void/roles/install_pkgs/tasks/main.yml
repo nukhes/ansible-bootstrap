@@ -41,6 +41,7 @@
       - xdg-desktop-portal
       - xdg-desktop-portal-gtk
       - blueman
+      - papirus-icon-theme
     state: present
 
 - name: Install Pixi

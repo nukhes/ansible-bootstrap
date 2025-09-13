@@ -34,3 +34,14 @@
         dest: /var/service/dbus
         state: link
         force: true
+
+- name: Enable pulseaudio service in runit
+  file:
+    src: /etc/sv/pulseaudio
+    dest: /var/service/pulseaudio
+    state: link
+    force: true
+
+- name: Restart pulseaudio service
+  command: sv restart pulseaudio
+  ignore_errors: true

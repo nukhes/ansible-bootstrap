@@ -4,6 +4,7 @@
   community.general.xbps:
     name:
       - vivaldi
+      - dropbox
       - feh
       - mpv
       - Thunar

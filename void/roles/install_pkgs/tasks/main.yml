@@ -23,7 +23,7 @@
       - git
       - curl
       - wget
-      - htop
+      - btop
       - stow
       - fish-shell
       - xsetroot
@@ -45,6 +45,9 @@
       - xdg-desktop-portal-gtk
       - blueman
       - papirus-icon-theme
+      - krita
+      - kdenlive
+      - calibre
     state: present
 
 - name: Install Pixi

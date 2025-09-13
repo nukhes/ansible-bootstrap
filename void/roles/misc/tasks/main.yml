@@ -62,3 +62,33 @@
         src: /etc/sv/agetty-autologin-tty1
         dest: /var/service/agetty-autologin-tty1
         state: link
+
+- name: Set custom kernel boot parameters on Void Linux
+  hosts: localhost
+  become: true
+  vars:
+    kernel_params: >
+      loglevel=0
+      amdgpu.ppfeaturemask=0xffffffff
+      sysrq_always_enabled=1
+      rootflags=noatime
+      pci=noaer
+      audit=0
+      mitigations=off
+      spec_store_bypass_disable
+      spectre_v2
+      quiet
+      kernel.nmi_watchdog=0
+
+  tasks:
+
+    - name: Ensure GRUB_CMDLINE_LINUX_DEFAULT has the custom kernel parameters
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_params }}"'
+        backrefs: yes
+
+    - name: Regenerate GRUB configuration
+      command: grub-mkconfig -o /boot/grub/grub.cfg
+

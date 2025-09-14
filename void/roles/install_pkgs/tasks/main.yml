@@ -50,6 +50,9 @@
       - calibre
       - gamemode
       - vim
+      - noto-fonts-ttf
+      - noto-fonts-cjk
+      - noto-fonts-ttf-extra
       - xournalpp
       - unrar
     state: present

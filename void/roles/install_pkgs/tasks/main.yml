@@ -51,6 +51,7 @@
       - calibre
       - gamemode
       - vim
+      - xournalpp
     state: present
 
 - name: Install Pixi

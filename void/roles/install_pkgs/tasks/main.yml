@@ -49,6 +49,7 @@
       - krita
       - kdenlive
       - calibre
+      - gamemode
     state: present
 
 - name: Install Pixi

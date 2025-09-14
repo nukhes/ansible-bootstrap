@@ -50,6 +50,7 @@
       - kdenlive
       - calibre
       - gamemode
+      - vim
     state: present
 
 - name: Install Pixi

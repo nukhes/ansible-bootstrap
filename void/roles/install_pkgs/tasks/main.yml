@@ -14,6 +14,7 @@
       - thunar-archive-plugin
       - telegram-desktop
       - flameshot
+      - uget
       - kitty
       - xorg
       - i3

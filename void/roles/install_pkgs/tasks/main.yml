@@ -52,6 +52,7 @@
       - gamemode
       - vim
       - xournalpp
+      - unrar
     state: present
 
 - name: Install Pixi

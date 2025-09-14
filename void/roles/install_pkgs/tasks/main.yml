@@ -30,8 +30,7 @@
       - xsetroot
       - xset
       - dex
-      - redshift
-      - lxsession
+      - redshift 
       - xrdb
       - xinput
       - setxkbmap

@@ -104,3 +104,11 @@
     src: /usr/lib/libayatana-appindicator3.so.1
     dest: /usr/lib/libappindicator3.so.1
     state: link
+
+- name: Ensure hostname is in /etc/hosts
+  become: true
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: "127.0.0.1   localhost.localdomain localhost {{ ansible_hostname }}"
+    backrefs: yes

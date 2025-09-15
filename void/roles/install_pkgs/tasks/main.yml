@@ -55,6 +55,7 @@
       - noto-fonts-ttf-extra
       - xournalpp
       - unrar
+      - usbmuxd
     state: present
 
 - name: Install Pixi

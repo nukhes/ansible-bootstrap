@@ -19,16 +19,16 @@
 
 - name: Clone dotfiles
   ansible.builtin.git:
-    repo: "https://github.com/nukhes/dotfiles.git"
-    dest: "/home/{{ username }}/dotfiles"
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_dir }}"
     version: main
     update: yes
 
 - name: Apply dotfiles with stow
   ansible.builtin.command:
     cmd: stow .
-    chdir: "/home/{{ username }}/dotfiles"
-  become: true
+    chdir: "{{ dotfiles_dir }}"
+  become: false
   become_user: "{{ username }}"
   register: stow_run
   changed_when: stow_run.rc == 0 and

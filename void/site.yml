@@ -12,10 +12,11 @@
       - 45.90.28.60
       - 45.90.30.60
     dotfiles_repo: "https://github.com/nukhes/dotfiles.git"
-    dotfiles_dir: "/home/alves/dotfiles"
+    dotfiles_dir: "/home/alves/.dots"
   roles:
     - install_pkgs
     - home_folder
     - docker
     - flatpak
+    - cursor
     - misc

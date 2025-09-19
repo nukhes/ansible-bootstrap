@@ -57,6 +57,7 @@
       - unrar
       - usbmuxd
       - zathura
+      - zathura-pdf-mupdf 
       - nvim
       - gparted
     state: present

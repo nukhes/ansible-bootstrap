@@ -9,13 +9,8 @@
   loop:
     - "/home/{{ username }}/.config"
     - "/home/{{ username }}/code"
-    - "/home/{{ username }}/docs"
     - "/home/{{ username }}/dl"
     - "/home/{{ username }}/media"
-
-- name: Show username and dest
-  ansible.builtin.debug:
-    msg: "username={{ username }}, dest=/home/{{ username }}/dotfiles"
 
 - name: Clone dotfiles
   ansible.builtin.git:

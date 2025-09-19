@@ -10,7 +10,6 @@
       - feh
       - mpv
       - Thunar
-      - lxappearance
       - thunar-archive-plugin
       - telegram-desktop
       - flameshot
@@ -58,8 +57,9 @@
       - usbmuxd
       - zathura
       - zathura-pdf-mupdf 
-      - nvim
       - gparted
+      - lxqt-policykit
+      - polkit
     state: present
 
 - name: Install Pixi

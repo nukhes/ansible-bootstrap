@@ -56,6 +56,9 @@
       - xournalpp
       - unrar
       - usbmuxd
+      - zathura
+      - nvim
+      - gparted
     state: present
 
 - name: Install Pixi

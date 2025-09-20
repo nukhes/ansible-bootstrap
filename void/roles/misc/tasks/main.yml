@@ -96,7 +96,6 @@
       nameserver {{ dns }}
       {% endfor %}
     state: present
-  when: not dhcpcd_conf.stat.exists
 
 - name: Ensure hostname is in /etc/hosts
   become: true

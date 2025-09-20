@@ -21,7 +21,7 @@
 
 - name: Apply dotfiles with stow
   ansible.builtin.command:
-    cmd: stow .
+    cmd: stow . --adopt
     chdir: "{{ dotfiles_dir }}"
   become: false
   become_user: "{{ username }}"

@@ -13,7 +13,7 @@
 - name: Install Bibata globally
   become: true
   ansible.builtin.copy:
-    src: "/tmp/Bibata-Modern-Classic/Bibata-Modern-Classic"
+    src: "/tmp/Bibata-Modern-Classic/"
     dest: "/usr/share/icons/default"
     owner: root
     group: root
@@ -22,7 +22,7 @@
 
 - name: Install Bibata for current user
   ansible.builtin.copy:
-    src: "/tmp/Bibata-Modern-Classic/Bibata-Modern-Classic"
+    src: "/tmp/Bibata-Modern-Classic/"
     dest: "/home/{{ username }}/.local/share/icons/default"
     owner: "{{ username }}"
     mode: '0755'

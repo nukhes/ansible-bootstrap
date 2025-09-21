@@ -3,6 +3,7 @@
   become: true
   gather_facts: false
   vars:
+    hostname: "void"
     nopassword:
       - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/poweroff"
       - "{{ username }} ALL=(ALL) NOPASSWD: /usr/bin/reboot"

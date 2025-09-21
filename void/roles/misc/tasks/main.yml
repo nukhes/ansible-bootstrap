@@ -91,5 +91,5 @@
   lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.0\.1'
-    line: "127.0.0.1   localhost.localdomain localhost {{ ansible_hostname }}"
+    line: "127.0.0.1   localhost.localdomain localhost {{ hostname }}"
     backrefs: yes

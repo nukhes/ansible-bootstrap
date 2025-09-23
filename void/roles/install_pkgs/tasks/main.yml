@@ -62,6 +62,7 @@
       - polkit
       - cups
       - ifuse
+      - ideviceinstaller
     state: present
 
 - name: Install Pixi

@@ -63,6 +63,7 @@
       - cups
       - ifuse
       - ideviceinstaller
+      - font-awesome
     state: present
 
 - name: Install Pixi

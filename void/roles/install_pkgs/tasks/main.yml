@@ -60,6 +60,8 @@
       - gparted
       - lxqt-policykit
       - polkit
+      - cups
+      - ifuse
     state: present
 
 - name: Install Pixi

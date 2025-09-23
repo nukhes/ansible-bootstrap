@@ -56,7 +56,7 @@
   lineinfile:
     path: /etc/default/grub
     regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=).*'
-    line: '\1"loglevel=0 amdgpu.ppfeaturemask=0xffffffff sysrq_always_enabled=1 rootflags=noatime pci=noaer audit=0 mitigations=off spec_store_bypass_disable spectre_v2 quiet kernel.nmi_watchdog=0"'
+    line: '\1"loglevel=0 amdgpu.ppfeaturemask=0xffffffff sysrq_always_enabled=1 rootflags=noatime pci=noaer audit=0 mitigations=off spec_store_bypass_disable spectre_v2 quiet kernel.nmi_watchdog=0 usbcore.autosuspend=-1"'
     backrefs: yes
 
 - name: Regenerate GRUB configuration

@@ -64,6 +64,8 @@
       - ifuse
       - ideviceinstaller
       - font-awesome
+      - udisks2
+      - udiskie
     state: present
 
 - name: Install Pixi
